@@ -1,0 +1,1 @@
+Here you will find a simple task list web app. It uses the CSS library Materialize but it is built using only vanilla JS for it's logic.
