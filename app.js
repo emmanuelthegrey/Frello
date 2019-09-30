@@ -52,6 +52,8 @@ function clearAllTasks(e) {
 	tasks.forEach(function (task) {
 		task.parentElement.remove();
 	});
+
+	localStorage.clear();
 }
 
 function removeTask(e) {
@@ -59,6 +61,16 @@ function removeTask(e) {
 
 		if (confirm("Sure about that?")) {
 			e.target.parentElement.parentElement.remove();
+
+			let tasks = localStorageManager();
+
+			tasks.forEach(function(task, i){
+				if(e.target.parentElement.parentElement.textContent === task){
+					tasks.splice(i, 1);
+				}
+			});
+
+			localStorage.setItem('tasks', JSON.stringify(tasks));
 		}
 	}
 }
