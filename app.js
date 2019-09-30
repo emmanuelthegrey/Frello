@@ -12,7 +12,7 @@ const taskInput = document.querySelector('#task');
 loadEventListeners();
 
 
-function loadEventListeners(){
+function loadEventListeners() {
 	form.addEventListener('submit', addTasks);
 
 	taskList.addEventListener('click', removeTask);
@@ -21,44 +21,54 @@ function loadEventListeners(){
 
 	filter.addEventListener('keyup', filterTasks);
 
-	function filterTasks(e){
-
-	}
 }
 
-function clearAllTasks(e){
+function filterTasks(e) {
+	const text = e.target.value.toLowerCase();
+	
+	document.querySelectorAll('.collection-item').forEach(function(task){
+		const item = task.firstChild.textContent;
+		if(item.toLowerCase().indexOf(text) !== -1){
+			task.style.display = 'block';
+		}else{
+			task.style.display = 'none';
+		}
+	});
+}
+
+function clearAllTasks(e) {
 	let tasks = document.querySelectorAll('.delete-item');
 
-	tasks.forEach(function(task){
+	tasks.forEach(function (task) {
 		task.parentElement.remove();
 	});
 }
 
-function removeTask(e){
-	if(e.target.parentElement.classList.contains('delete-item')){
+function removeTask(e) {
+	if (e.target.parentElement.classList.contains('delete-item')) {
 
-		if(confirm("Sure about that?")){
-		e.target.parentElement.parentElement.remove();
+		if (confirm("Sure about that?")) {
+			e.target.parentElement.parentElement.remove();
 		}
 	}
 }
 
-function addTasks(e){
-	if(taskInput.value === ''){
+function addTasks(e) {
+	if (taskInput.value === '') {
 		alert('add a task');
 	}
-		const li = document.createElement('li');
+	const li = document.createElement('li');
 
-		li.className = 'collection-item';
-		li.appendChild(document.createTextNode(taskInput.value));
-		const link = document.createElement('a');
-		link.className = 'delete-item secondary-content';
-		link.innerHTML = '<i class="fa fa-minus"></i>';
+	li.className = 'collection-item';
+	li.appendChild(document.createTextNode(taskInput.value));
+	const link = document.createElement('a');
+	link.className = 'delete-item secondary-content';
+	link.innerHTML = '<i class="fa fa-minus"></i>';
 
-		li.appendChild(link);
+	li.appendChild(link);
 
-		taskList.appendChild(li);
-		taskInput.value = '';
+	taskList.appendChild(li);
+	taskInput.value = '';
 
 	e.preventDefault();
 }
