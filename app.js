@@ -13,6 +13,8 @@ loadEventListeners();
 
 
 function loadEventListeners() {
+	document.addEventListener('DOMContentLoaded', getTasks);
+
 	form.addEventListener('submit', addTasks);
 
 	taskList.addEventListener('click', removeTask);
@@ -21,6 +23,14 @@ function loadEventListeners() {
 
 	filter.addEventListener('keyup', filterTasks);
 
+}
+
+function getTasks(){
+	let tasks = localStorageManager();
+
+	tasks.forEach(function(task){
+		createTaskLi(task);
+	});
 }
 
 function filterTasks(e) {
@@ -57,18 +67,42 @@ function addTasks(e) {
 	if (taskInput.value === '') {
 		alert('add a task');
 	}
-	const li = document.createElement('li');
+	createTaskLi();
 
-	li.className = 'collection-item';
-	li.appendChild(document.createTextNode(taskInput.value));
-	const link = document.createElement('a');
-	link.className = 'delete-item secondary-content';
-	link.innerHTML = '<i class="fa fa-minus"></i>';
+	
+	localStorageManager(taskInput.value);
 
-	li.appendChild(link);
-
-	taskList.appendChild(li);
 	taskInput.value = '';
 
 	e.preventDefault();
+}
+
+function createTaskLi(task = null) {
+	if(task === null) task = taskInput.value;
+	const li = document.createElement('li');
+	li.className = 'collection-item';
+	li.appendChild(document.createTextNode(task));
+	const link = document.createElement('a');
+	link.className = 'delete-item secondary-content';
+	link.innerHTML = '<i class="fa fa-minus"></i>';
+	li.appendChild(link);
+	taskList.appendChild(li);
+}
+
+function localStorageManager(task = null){
+	let tasks;
+
+	if(localStorage.getItem('tasks') === null){
+		tasks = [];
+	}else{
+		tasks = JSON.parse( localStorage.getItem('tasks') );
+	}
+
+	if(task !== null){
+	tasks.push(task);
+	}
+
+	localStorage.setItem('tasks', JSON.stringify(tasks));
+
+	return tasks;
 }
